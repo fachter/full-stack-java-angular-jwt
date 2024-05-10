@@ -3,6 +3,7 @@ package com.fachter.backend.useCases;
 import com.fachter.backend.config.Role;
 import com.fachter.backend.entities.UserAccount;
 import com.fachter.backend.entities.UserRole;
+import com.fachter.backend.services.AuthenticationServiceImpl;
 import com.fachter.backend.utils.JsonWebTokenUtil;
 import com.fachter.backend.viewModels.AuthenticationRequestViewModel;
 import com.fachter.backend.viewModels.AuthenticationResponseViewModel;
@@ -45,7 +46,9 @@ class AuthenticationUseCaseImplTest {
         useCase = new AuthenticationUseCaseImpl(
                 userDetailsServiceMock,
                 authenticationManagerMock,
-                jsonWebTokenUtil
+                new AuthenticationServiceImpl(
+                    jsonWebTokenUtil
+                )
         );
     }
 

@@ -29,8 +29,6 @@ class AuthenticationControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    private UserDetailsService userDetailsService;
-    @Autowired
     private JsonWebTokenUtil jsonWebTokenUtil;
     private final ObjectMapper objectMapper = new ObjectMapper();
 

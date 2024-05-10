@@ -11,7 +11,6 @@ import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -74,7 +73,7 @@ class AuthenticationControllerIntegrationTest {
 
         AuthenticationResponseViewModel response = objectMapper
                 .readValue(mvcResult.getResponse().getContentAsByteArray(), AuthenticationResponseViewModel.class);
-        assertEquals(List.of(Role.ADMIN.name(), Role.USER.name()), response.authorities.stream().sorted().toList());
+        assertEquals(List.of(Role.ADMIN.name(), Role.USER.name()), response.authorities);
         assertEquals("admin", jsonWebTokenUtil.extractUsername(response.token));
 
     }

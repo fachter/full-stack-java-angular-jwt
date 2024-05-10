@@ -41,6 +41,6 @@ public class AuthenticationUseCaseImpl implements AuthenticationUseCase {
     }
 
     private List<String> getUserAuthorities(UserAccount userDetails) {
-        return userDetails.getUserRoles().stream().map(UserRole::getName).toList();
+        return userDetails.getUserRoles().stream().map(UserRole::getName).sorted().toList();
     }
 }

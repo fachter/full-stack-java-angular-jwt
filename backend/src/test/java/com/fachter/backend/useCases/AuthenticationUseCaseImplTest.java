@@ -86,7 +86,7 @@ class AuthenticationUseCaseImplTest {
                 .setUsername(username)
                 .setPassword(password));
 
-        assertEquals(List.of(Role.ADMIN.name(), Role.USER.name()), response.authorities.stream().sorted().toList());
+        assertEquals(List.of(Role.ADMIN.name(), Role.USER.name()), response.authorities);
         assertNotNull(response.token);
         assertEquals(username, jsonWebTokenUtil.extractUsername(response.token));
         assertEquals(LocalDateTime.now().plusDays(3).toEpochSecond(OffsetDateTime.now().getOffset()) * 1000,

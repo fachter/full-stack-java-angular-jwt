@@ -1,10 +1,9 @@
-package com.fachter.backend.useCases;
+package com.fachter.backend.useCases.auth;
 
 import com.fachter.backend.config.Role;
 import com.fachter.backend.entities.UserAccount;
 import com.fachter.backend.entities.UserRole;
 import com.fachter.backend.services.auth.AuthenticationServiceImpl;
-import com.fachter.backend.useCases.auth.AuthenticationUseCaseImpl;
 import com.fachter.backend.utils.JsonWebTokenUtil;
 import com.fachter.backend.viewModels.auth.AuthenticationRequestViewModel;
 import com.fachter.backend.viewModels.auth.AuthenticationResponseViewModel;

@@ -1,4 +1,4 @@
-package com.fachter.backend.controllers;
+package com.fachter.backend.controllers.auth;
 
 import com.fachter.backend.config.Role;
 import com.fachter.backend.utils.JsonWebTokenUtil;

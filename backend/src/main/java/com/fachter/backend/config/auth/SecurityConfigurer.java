@@ -65,7 +65,8 @@ public class SecurityConfigurer {
                 .anonymous(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
-                                "/api/authenticate"
+                                "/api/authenticate",
+                                "/api/register"
                         ).permitAll()
                         .requestMatchers("/api/user/**").hasAuthority(Role.ADMIN.name())
                         .anyRequest().authenticated())

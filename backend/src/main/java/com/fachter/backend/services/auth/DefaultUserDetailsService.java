@@ -1,4 +1,4 @@
-package com.fachter.backend.services;
+package com.fachter.backend.services.auth;
 
 import com.fachter.backend.repositories.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,4 +1,4 @@
-package com.fachter.backend.viewModels;
+package com.fachter.backend.viewModels.auth;
 
 public class AuthenticationRequestViewModel {
 

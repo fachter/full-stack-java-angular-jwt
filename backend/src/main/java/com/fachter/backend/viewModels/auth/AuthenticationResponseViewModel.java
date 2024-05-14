@@ -1,4 +1,4 @@
-package com.fachter.backend.viewModels;
+package com.fachter.backend.viewModels.auth;
 
 import java.util.ArrayList;
 import java.util.List;

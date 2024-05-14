@@ -1,6 +1,6 @@
 package com.fachter.backend.config.auth;
 
-import com.fachter.backend.services.DefaultUserDetailsService;
+import com.fachter.backend.services.auth.DefaultUserDetailsService;
 import com.fachter.backend.utils.JsonWebTokenUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

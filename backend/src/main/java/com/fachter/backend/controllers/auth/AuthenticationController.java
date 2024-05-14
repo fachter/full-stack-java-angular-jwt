@@ -1,8 +1,8 @@
-package com.fachter.backend.controllers;
+package com.fachter.backend.controllers.auth;
 
 import com.fachter.backend.entities.UserAccount;
-import com.fachter.backend.viewModels.AuthenticationRequestViewModel;
-import com.fachter.backend.viewModels.AuthenticationResponseViewModel;
+import com.fachter.backend.viewModels.auth.AuthenticationRequestViewModel;
+import com.fachter.backend.viewModels.auth.AuthenticationResponseViewModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;

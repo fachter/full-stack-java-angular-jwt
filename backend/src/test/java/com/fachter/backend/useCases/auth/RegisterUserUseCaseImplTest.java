@@ -3,6 +3,8 @@ package com.fachter.backend.useCases.auth;
 import com.fachter.backend.entities.UserAccount;
 import com.fachter.backend.exceptions.UsernameAlreadyExistsException;
 import com.fachter.backend.repositories.UserRepository;
+import com.fachter.backend.services.auth.AuthenticationServiceImpl;
+import com.fachter.backend.utils.JsonWebTokenUtil;
 import com.fachter.backend.viewModels.auth.RegisterUserViewModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +15,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,10 +33,16 @@ class RegisterUserUseCaseImplTest {
     private RegisterUserUseCaseImpl useCase;
     @Captor
     private ArgumentCaptor<UserAccount> captor;
+    private JsonWebTokenUtil jsonWebTokenUtil;
 
     @BeforeEach
     void setUp() {
-        useCase = new RegisterUserUseCaseImpl(userRepositoryMock, passwordEncoderMock);
+        jsonWebTokenUtil = new JsonWebTokenUtil("testing-secret");
+        useCase = new RegisterUserUseCaseImpl(
+                userRepositoryMock,
+                passwordEncoderMock,
+                new AuthenticationServiceImpl(jsonWebTokenUtil)
+        );
     }
 
     @Test
@@ -52,11 +62,15 @@ class RegisterUserUseCaseImplTest {
         when(userRepositoryMock.findByUsername(newUsername)).thenReturn(Optional.empty());
         when(passwordEncoderMock.encode(newPassword)).thenReturn("encoded new password");
 
-        useCase.register(new RegisterUserViewModel().setUsername(newUsername).setPassword(newPassword));
+        var response = useCase.register(new RegisterUserViewModel().setUsername(newUsername).setPassword(newPassword));
 
         verify(userRepositoryMock).save(captor.capture());
         var persistedUser = captor.getValue();
         assertEquals(newUsername, persistedUser.getUsername());
         assertEquals("encoded new password", persistedUser.getPassword());
+        assertNotNull(response.token);
+        assertEquals(newUsername, jsonWebTokenUtil.extractUsername(response.token));
+        assertEquals(LocalDateTime.now().plusDays(3).toEpochSecond(OffsetDateTime.now().getOffset()) * 1000,
+                response.expiresAt, 100);
     }
 }

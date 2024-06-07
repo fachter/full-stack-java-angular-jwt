@@ -1,6 +1,9 @@
 package com.fachter.backend.controllers.auth;
 
+import com.fachter.backend.config.Role;
 import com.fachter.backend.repositories.UserRepository;
+import com.fachter.backend.utils.JsonWebTokenUtil;
+import com.fachter.backend.viewModels.auth.AuthenticationResponseViewModel;
 import com.fachter.backend.viewModels.auth.RegisterUserViewModel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
@@ -12,6 +15,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -30,6 +35,8 @@ class UserManagementControllerIntegrationTest {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private JsonWebTokenUtil jsonWebTokenUtil;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @AfterEach
@@ -65,14 +72,19 @@ class UserManagementControllerIntegrationTest {
                 .setUsername(username)
                 .setPassword(password));
 
-        mockMvc.perform(
+        var mvcResult = mockMvc.perform(
                         post("/api/register")
                                 .contentType("application/json")
                                 .content(content))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk()).andReturn();
+
         var user = userRepository.findByUsername(username);
         assertTrue(user.isPresent());
         assertEquals(username, user.get().getUsername());
         assertTrue(passwordEncoder.matches(password, user.get().getPassword()));
+        AuthenticationResponseViewModel response = objectMapper
+                .readValue(mvcResult.getResponse().getContentAsByteArray(), AuthenticationResponseViewModel.class);
+        assertEquals(username, jsonWebTokenUtil.extractUsername(response.token));
+
     }
 }

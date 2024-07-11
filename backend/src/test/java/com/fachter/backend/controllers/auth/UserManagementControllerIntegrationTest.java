@@ -1,6 +1,5 @@
 package com.fachter.backend.controllers.auth;
 
-import com.fachter.backend.config.Role;
 import com.fachter.backend.repositories.UserRepository;
 import com.fachter.backend.utils.JsonWebTokenUtil;
 import com.fachter.backend.viewModels.auth.AuthenticationResponseViewModel;
@@ -15,8 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.List;
+import org.springframework.test.web.servlet.MvcResult;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -53,16 +51,31 @@ class UserManagementControllerIntegrationTest {
     }
 
     @Test
+    void register_givenViewModelWithoutContent_thenReturn400() throws Exception {
+        String content = objectMapper.writeValueAsString(new RegisterUserViewModel());
+
+        MvcResult mvcResult = mockMvc.perform(
+                        post("/api/register")
+                                .contentType("application/json")
+                                .content(content))
+                .andExpect(status().isBadRequest()).andReturn();
+
+        assertEquals("Invalid data!", mvcResult.getResponse().getContentAsString());
+    }
+
+    @Test
     void register_givenUsernameAlreadyExists_thenReturn406() throws Exception {
         String content = objectMapper.writeValueAsString(new RegisterUserViewModel()
                 .setUsername("admin")
                 .setPassword("does not matter"));
 
-        mockMvc.perform(
+        MvcResult mvcResult = mockMvc.perform(
                         post("/api/register")
                                 .contentType("application/json")
                                 .content(content))
-                .andExpect(status().isNotAcceptable());
+                .andExpect(status().isNotAcceptable()).andReturn();
+
+        assertEquals("Username already exists!", mvcResult.getResponse().getContentAsString());
     }
 
     @Test

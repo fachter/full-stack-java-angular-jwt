@@ -2,6 +2,7 @@ package com.fachter.backend.useCases.auth;
 
 import com.fachter.backend.controllers.auth.RegisterUserUseCase;
 import com.fachter.backend.entities.UserAccount;
+import com.fachter.backend.exceptions.InvalidDataException;
 import com.fachter.backend.exceptions.UsernameAlreadyExistsException;
 import com.fachter.backend.repositories.UserRepository;
 import com.fachter.backend.services.auth.AuthenticationService;
@@ -24,7 +25,9 @@ public class RegisterUserUseCaseImpl implements RegisterUserUseCase {
     }
 
     @Override
-    public AuthenticationResponseViewModel register(RegisterUserViewModel registerUserViewModel) throws UsernameAlreadyExistsException {
+    public AuthenticationResponseViewModel register(RegisterUserViewModel registerUserViewModel) throws UsernameAlreadyExistsException, InvalidDataException {
+        if (registerUserViewModel.username == null || registerUserViewModel.password == null)
+            throw new InvalidDataException();
         if (userRepository.findByUsername(registerUserViewModel.username).isPresent())
             throw new UsernameAlreadyExistsException();
         UserAccount user = new UserAccount()

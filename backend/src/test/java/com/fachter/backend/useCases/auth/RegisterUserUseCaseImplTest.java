@@ -1,6 +1,7 @@
 package com.fachter.backend.useCases.auth;
 
 import com.fachter.backend.entities.UserAccount;
+import com.fachter.backend.exceptions.InvalidDataException;
 import com.fachter.backend.exceptions.UsernameAlreadyExistsException;
 import com.fachter.backend.repositories.UserRepository;
 import com.fachter.backend.services.auth.AuthenticationServiceImpl;
@@ -43,6 +44,20 @@ class RegisterUserUseCaseImplTest {
                 passwordEncoderMock,
                 new AuthenticationServiceImpl(jsonWebTokenUtil)
         );
+    }
+
+    @Test
+    void givenNullUsername_thenThrowException() {
+        assertThrows(InvalidDataException.class, () -> useCase.register(
+                new RegisterUserViewModel().setPassword("test")
+        ));
+    }
+
+    @Test
+    void givenNullPassword_thenThrowException() {
+        assertThrows(InvalidDataException.class, () -> useCase.register(
+                new RegisterUserViewModel().setUsername("test")
+        ));
     }
 
     @Test

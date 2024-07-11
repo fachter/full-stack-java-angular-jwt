@@ -1,5 +1,6 @@
 package com.fachter.backend.controllers.auth;
 
+import com.fachter.backend.exceptions.InvalidDataException;
 import com.fachter.backend.exceptions.UsernameAlreadyExistsException;
 import com.fachter.backend.viewModels.auth.AuthenticationResponseViewModel;
 import com.fachter.backend.viewModels.auth.RegisterUserViewModel;
@@ -23,10 +24,12 @@ public class UserManagementController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterUserViewModel registerUserViewModel) {
         try {
-            var response = registerUserUseCase.register(registerUserViewModel);
+            AuthenticationResponseViewModel response = registerUserUseCase.register(registerUserViewModel);
             return ResponseEntity.ok(response);
         } catch (UsernameAlreadyExistsException e) {
-            return new ResponseEntity<>("Username already exists", HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>("Username already exists!", HttpStatus.NOT_ACCEPTABLE);
+        } catch (InvalidDataException e) {
+            return new ResponseEntity<>("Invalid data!", HttpStatus.BAD_REQUEST);
         }
     }
 }

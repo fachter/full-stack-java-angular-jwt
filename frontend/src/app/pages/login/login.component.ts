@@ -7,7 +7,6 @@ import {environment} from "../../../environments/environment";
 import {FloatLabelModule} from "primeng/floatlabel";
 import {InputTextModule} from "primeng/inputtext";
 import {ButtonModule} from "primeng/button";
-import {MessageService} from "primeng/api";
 import {MessageHelperService} from "../../services/message-helper.service";
 
 @Component({

@@ -7,6 +7,7 @@ import {HttpClient} from "@angular/common/http";
 import {FloatLabelModule} from "primeng/floatlabel";
 import {InputTextModule} from "primeng/inputtext";
 import {ButtonModule} from "primeng/button";
+import {MessageHelperService} from "../../services/message-helper.service";
 
 @Component({
   selector: 'my-app-register',
@@ -24,6 +25,7 @@ export class RegisterComponent {
   formBuilder = inject(FormBuilder);
   http = inject(HttpClient)
   loginService = inject(LoginService)
+  messageService = inject(MessageHelperService)
 
   form = this.formBuilder.nonNullable.group({
     username: ["", Validators.required],
@@ -32,8 +34,8 @@ export class RegisterComponent {
   })
 
   onSubmit(): void {
-    console.log("submitting")
     if (!this.form.valid) {
+      this.sendErrorMessage("Please fill out all fields")
       return;
     }
     let data = {
@@ -47,9 +49,13 @@ export class RegisterComponent {
           this.loginService.login(user);
         },
         error: (err) => {
-          console.log(err)
+          let message = err.status === 401 ? err.response.data.message : "Server Error. Please try again later.";
+          this.sendErrorMessage(message);
         }
       })
   }
 
+  private sendErrorMessage(message: string) {
+    this.messageService.sendErrorMessage("Registration failed!", message);
+  }
 }

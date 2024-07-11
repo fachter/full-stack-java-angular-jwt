@@ -1,24 +1,23 @@
-import {Component, inject} from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import {Component, inject, OnInit} from '@angular/core';
+import {RouterOutlet} from '@angular/router';
 import {NavigationComponent} from "./pages/navigation/navigation.component";
 import {MenuService} from "./services/menu.service";
-import {AuthService} from "./services/auth.service";
 import {LogoutService} from "./services/logout.service";
 import {HttpClient} from "@angular/common/http";
 import {LoginService} from "./services/login.service";
 import {UserInterface} from "./models/user.interface";
 import {environment} from "../environments/environment";
+import {ToastModule} from "primeng/toast";
 
 @Component({
   selector: 'my-app-root',
   standalone: true,
-  imports: [RouterOutlet, NavigationComponent],
+  imports: [RouterOutlet, NavigationComponent, ToastModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   menuService = inject(MenuService);
-  authService = inject(AuthService);
   loginService = inject(LoginService);
   logoutService = inject(LogoutService);
   http = inject(HttpClient)
@@ -41,9 +40,5 @@ export class AppComponent {
           this.logoutService.logout();
         }
       })
-  }
-
-  logout() {
-    this.logoutService.logout();
   }
 }

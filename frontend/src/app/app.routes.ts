@@ -14,5 +14,10 @@ export const routes: Routes = [
     path: "",
     loadComponent: () => import("./pages/dashboard/dashboard.component").then(mod => mod.DashboardComponent),
     canActivate: [authGuard]
+  },
+  {
+    path: "profile",
+    loadComponent: () => import("./pages/profile/profile.component").then(mod => mod.ProfileComponent),
+    canActivate: [authGuard]
   }
 ];

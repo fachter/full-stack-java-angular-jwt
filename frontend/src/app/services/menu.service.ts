@@ -30,6 +30,11 @@ export class MenuService {
           routerLink: "",
           icon: "pi pi-home"
         },
+        {
+          label: "Profile",
+          routerLink: "profile",
+          icon: "pi pi-user"
+        }
       ]
     }
   }
